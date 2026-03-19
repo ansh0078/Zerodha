@@ -1,11 +1,28 @@
 require("dotenv").config();
 const express = require("express");
-const app = express();
 const mongoose = require("mongoose");
+const bodyParser = require("body-parser");
+const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const authRoute = require("./routes/AuthRoute")
+
 const { PostionsModel } = require("./model/PositionsModel");
+const { HoldingsModel } = require("./model/HoldingsModel");
+const { OrdersModel } = require("./model/OrdersModel");
+
+const app = express();
 
 const PORT = process.env.PORT || 3002;
 const uri = process.env.MONGO_URL;
+
+app.use(cors({
+  origin: ["http://localhost:3002/api/"],
+  methods: ["GET", "POST", "PUT", "DELTE"],
+  credentials: true,
+}));
+app.use(bodyParser.json());
+app.use(cookieParser());
+app.use("/", authRoute);
 
 // app.get("/addPostions", async (req, res) => {
 //   let tempPostions = [
@@ -48,8 +65,36 @@ const uri = process.env.MONGO_URL;
 //   res.send("done!");
 // });
 
-app.listen(PORT, () => {
-  console.log("App Started!");
-  mongoose.connect(uri);
-  console.log("DB Connected!");
+app.get("/allHoldings", async (req, res) => {
+  let allHoldings = await HoldingsModel.find({});
+  res.json(allHoldings);
 });
+
+app.get("/allPositions", async (req, res) => {
+  let allPostions = await PostionsModel.find({});
+  res.json(allPostions);
+});
+
+app.post("/newOrder", async (req, res) => {
+  let newOrder = new OrdersModel({
+    name: req.body.name,
+    qty: req.body.qty,
+    price: req.body.price,
+    mode: req.body.mode,
+  });
+
+  newOrder.save();
+
+  res.send("OrderSaved");
+});
+
+mongoose
+  .connect(uri,)
+  .then(() => console.log("MongoDB is connected successfully"))
+  .catch((err) => console.error(err));
+
+app.listen(PORT, () => {
+  console.log(`Server is Listening on port ${PORT}`);
+});
+
+

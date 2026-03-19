@@ -1,14 +1,21 @@
 import React from "react";
-
-import Dashboard from "./Dashboard";
-import TopBar from "./TopBar";
+import { Route, Routes } from "react-router-dom";
+import Login from "./login";
+import Signup from "./signup";
 
 const Home = () => {
   return (
-    <>
-      <TopBar />
-      <Dashboard />
-    </>
+    // <>
+    //   <TopBar />
+    //   <Dashboard />
+    // </>
+
+    <div className="content">
+      <Routes>
+        <Route exact path="/" element={<Signup />} />
+        <Route path="/login" element={<Login />} />
+      </Routes>
+    </div>
   );
 };
 
