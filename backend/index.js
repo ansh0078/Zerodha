@@ -16,10 +16,10 @@ const PORT = process.env.PORT || 3002;
 const uri = process.env.MONGO_URL;
 
 app.use(cors({
-  origin: ["http://localhost:3002/api/"],
-  methods: ["GET", "POST", "PUT", "DELTE"],
+  origin: "http://localhost:3000",
   credentials: true,
 }));
+app.use(express.json());
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use("/", authRoute);

@@ -7,15 +7,16 @@ const userVerification = (req, res) => {
   if (!token) {
     return res.json({ status: false })
   }
-  jwt.verify(token, process.env.TOKEN_KEY, async (err, data) => {
+  jwt.verify(token, process.env.TOKEN_KEY, async (err, decode) => {
     if (err) {
      return res.json({ status: false })
     } else {
-      const user = await UsersModel.findById(data.id)
-      if (user) return res.json({ status: true, user: user.username })
-      else return res.json({ status: false })
+      return res.json({
+        status: true,
+        user: decoded.id,
+      });
     }
-  })
+  });
 }
 
 module.exports = userVerification;

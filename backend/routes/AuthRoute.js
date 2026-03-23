@@ -6,6 +6,7 @@ const userVerification = require("../middleware/AuthMiddleware");
 const router = express.Router();
 
 router.post("/signup", Signup);
-router.post("/login", userVerification, Login);
+router.post("/login", Login);
+router.post("/", userVerification);
 
 module.exports = router;
